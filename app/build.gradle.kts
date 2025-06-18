@@ -79,6 +79,7 @@ android {
 
 dependencies {
     implementation(project(":theme"))
+    implementation(project(":network"))
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose.android)
     implementation(libs.activity.compose)

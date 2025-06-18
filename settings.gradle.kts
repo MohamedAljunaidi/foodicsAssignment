@@ -25,3 +25,4 @@ rootProject.name = "FoodicsAssignment"
 include(":app")
 include(":theme")
 include(":core")
+include(":network")
