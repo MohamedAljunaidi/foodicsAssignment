@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_general_title">The application encountered an error</string>
+    <string name="error_general_message">Sorry dear user, we were unable to serve you as required</string>
+    <string name="error_unauthorized_title">Information</string>
+    <string name="error_unauthorized_message">You have been automatically logged out of the portal services. Please log in again</string>
+
+    <string name="error_network_connection_title">Information</string>
+    <string name="error_network_connection_message">No internet connection. Please check your internet settings</string>
+
+    <string name="dialog_continue">Continue</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_try_again">Try Again</string>
+</resources>
