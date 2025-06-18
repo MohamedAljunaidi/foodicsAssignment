@@ -3,6 +3,7 @@ kotlinGradlePlugin = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 espressoCore = "3.6.1"
+ktorClientCore = "2.3.12"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
 androidxComposeBom = "2025.06.00"
@@ -19,6 +20,10 @@ androidGradlePlugin = "8.10.1"
 junitVersion = "1.2.1"
 appcompat = "1.7.1"
 material = "1.12.0"
+coroutine = "1.8.1"
+okhttp_version = "4.12.0"
+gson = "2.11.0"
+ktor_serialization = "1.8.0"
 
 
 
@@ -26,6 +31,10 @@ material = "1.12.0"
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 espresso_core_test = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
+ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktorClientCore" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
@@ -37,6 +46,10 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" ,version.ref = "material_version"}
 coil = { group = "io.coil-kt", name = "coil-compose" ,version.ref = "coil_version"}
+coroutines_core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core" ,version.ref = "coroutine"}
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib" ,version.ref = "kotlinGradlePlugin"}
+loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" ,version.ref = "okhttp_version"}
+gson = { group = "com.google.code.gson", name = "gson" ,version.ref = "gson"}
 
 lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinVersion" }
@@ -57,3 +70,4 @@ android-library = { id = "com.android.library", version.ref = "androidGradlePlug
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 automattic-measure-builds = { id = "com.automattic.android.measure-builds", version.ref = "automatticMeasureBuilds" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlinGradlePlugin"  }
+kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  version.ref = "ktor_serialization"  }
