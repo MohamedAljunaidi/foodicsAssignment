@@ -1,4 +1,5 @@
 pluginManagement {
+
     repositories {
         google {
             content {
@@ -10,6 +11,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -21,4 +23,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "FoodicsAssignment"
 include(":app")
- 
+include(":theme")
+include(":core")
