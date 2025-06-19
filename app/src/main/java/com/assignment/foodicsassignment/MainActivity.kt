@@ -10,16 +10,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.assignment.navigation.direction.hometab.HomeDestinationEnum
+import com.assignment.navigation.direction.hometab.HomeNavigator
+import com.assignment.navigation.extension.navigateToDirection
 import com.assignment.theme.theme.FoodicsAssignmentTheme
 import com.assignment.theme.theme.color
 import kotlinx.coroutines.delay
@@ -30,18 +33,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                MyApp()
-            }
+            MyApp()
+
         }
     }
-}
 
 
 @Composable
 fun MyApp() {
+    val context = LocalContext.current
     LaunchedEffect(true) {
         delay(3000L)
+        HomeNavigator.navigateToDirection(
+            context,
+            destination = HomeDestinationEnum.Home
+        )
+        finish()
     }
 
     FoodicsAssignmentTheme {
@@ -85,4 +92,5 @@ fun GreetingPreview() {
     FoodicsAssignmentTheme {
         Greeting("Android")
     }
+}
 }

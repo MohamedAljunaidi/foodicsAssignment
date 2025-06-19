@@ -1,22 +1,19 @@
 plugins {
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.automattic.measure.builds)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.assignment.foodicsassignment"
+    namespace = "com.assignment.hometab"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.assignment.foodicsassignment"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -33,8 +30,6 @@ android {
 
         getByName("debug") {
             isMinifyEnabled = false
-            enableUnitTestCoverage = true
-            enableAndroidTestCoverage = true
         }
         getByName("release") {
             proguardFiles(
@@ -66,7 +61,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    applicationVariants.forEach { variant ->
+    libraryVariants.forEach { variant ->
         variant.sourceSets.forEach {
             it.javaDirectories += files("build/generated/ksp/${variant.name}/kotlin")
         }
@@ -78,8 +73,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:hometab"))
     implementation(project(":navigation"))
+    implementation(project(":core"))
     implementation(project(":theme"))
     implementation(project(":network"))
     implementation(libs.lifecycle.runtime.ktx)
