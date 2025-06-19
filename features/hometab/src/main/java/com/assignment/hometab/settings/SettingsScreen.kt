@@ -1,0 +1,26 @@
+package com.assignment.hometab.settings
+
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.assignment.core.bases.BaseScreen
+import com.assignment.core.bases.BaseViewState
+
+@Composable
+internal fun SettingsScreen(
+    modifier: Modifier = Modifier,
+) {
+    BaseScreen(
+        baseViewState = BaseViewState.Idle,
+        content = {
+            Text(
+                text = "SettingsScreen",
+                modifier = modifier
+            )
+        },
+    )
+
+}
+
+
+
