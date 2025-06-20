@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.FoodicsAssignment" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.SplashScreen.MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <item name="postSplashScreenTheme">@style/Theme.SplashScreen</item>
+    </style>
 </resources>

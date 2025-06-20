@@ -12,9 +12,12 @@ data class AppColor(
     val black: Color = Color.Unspecified,
     val topAppBar: Color = Color.Unspecified,
     val fieldColor: Color = Color.Unspecified,
+    val navigationColor: Color = Color.Unspecified,
     val secondaryBackground: Color = Color.Unspecified,
     val selectedColor: Color = Color.Unspecified,
     val unSelectedColor: Color = Color.Unspecified,
+    val surface: Color = Color.Unspecified,
+    val primary: Color = Color.Unspecified,
 )
 
 internal val LocalAppColor = compositionLocalOf { AppColor() }
@@ -30,12 +33,22 @@ internal val LocalLightColorScheme = AppColor(
     black = Black,
     topAppBar = White,
     secondaryBackground = Black95,
+    primary = BlueGray0,
+    selectedColor = BlueGray40,
+    unSelectedColor = Black,
+    fieldColor = White,
+    surface = White,
 )
 
 internal val LocalDarkColorScheme = AppColor(
     white = Black,
     black = White,
     topAppBar = Black10,
-    secondaryBackground = Black
+    secondaryBackground = Black,
+    primary = Red40,
+    selectedColor = Red40,
+    unSelectedColor = Black,
+    fieldColor = Black10,
+    surface = Black20,
 )
 

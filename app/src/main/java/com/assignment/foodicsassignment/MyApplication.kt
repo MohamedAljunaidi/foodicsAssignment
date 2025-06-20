@@ -1,6 +1,8 @@
 package com.assignment.foodicsassignment
 
 import android.app.Application
+import com.assignment.caching.di.CachingModule
+import com.assignment.hometab.tables.di.CategoriesModule
 import com.assignment.network.di.NetworkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -16,7 +18,7 @@ class MyApplication : Application() {
             androidLogger()
             androidFileProperties()
 
-            modules(listOf(NetworkModule().module))
+            modules(listOf(NetworkModule().module, CachingModule().module, CategoriesModule().module, defaultModule))
 
         }
     }

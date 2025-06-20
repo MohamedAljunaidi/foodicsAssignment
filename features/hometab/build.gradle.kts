@@ -77,6 +77,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":theme"))
     implementation(project(":network"))
+    implementation(project(":caching"))
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose.android)
     implementation(libs.activity.compose)
@@ -94,9 +95,12 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.ui.tooling)
     androidTestImplementation(libs.ui.test.manifest)
-
+    implementation(libs.coil)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.annotations)
+    implementation(libs.gson)
+    debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.koin.ksp.compiler)
+
 }

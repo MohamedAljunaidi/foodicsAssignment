@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import com.assignment.hometab.menu.MenuScreen
 import com.assignment.hometab.orders.OrdersScreen
 import com.assignment.hometab.settings.SettingsScreen
-import com.assignment.hometab.tables.TablesScreen
+import com.assignment.hometab.tables.presentation.TablesScreen
 import com.assignment.navigation.navigation.constants.NavigationConstants
 
 

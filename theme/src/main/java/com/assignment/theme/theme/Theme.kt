@@ -1,25 +1,29 @@
 package com.assignment.theme.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.view.Window
 import android.view.WindowInsets
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val darkColorScheme = darkColorScheme(
     //The primary color could be used for the app bar, buttons, and other important UI elements.
-    primary = Orange40,
+    primary = BlueGray0,
     //Color used for text and icons displayed on top of the primary color.
     onPrimary = White,
     //The secondary color could be used for tabs, headers, and other secondary UI elements.
@@ -45,7 +49,7 @@ private val darkColorScheme = darkColorScheme(
 
 private val lightColorScheme = lightColorScheme(
     //The primary color could be used for the app bar, buttons, and other important UI elements.
-    primary = Orange40,
+    primary = Black,
     //Color used for text and icons displayed on top of the primary color.
     onPrimary = White,
     //The secondary color could be used for tabs, headers, and other secondary UI elements.
@@ -69,6 +73,7 @@ private val lightColorScheme = lightColorScheme(
     //outline = Pink40
 )
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun FoodicsAssignmentTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -79,6 +84,7 @@ fun FoodicsAssignmentTheme(
         else -> lightColorScheme
     }
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
@@ -91,15 +97,64 @@ fun FoodicsAssignmentTheme(
         darkTheme -> LocalDarkColorScheme
         else -> LocalLightColorScheme
     }
-    CompositionLocalProvider(values = arrayOf(LocalAppColor provides appColorScheme)) {
+
+    val dimensions = getDimensions()
+
+    ProvideDimens(dimensions = dimensions) {
+        ProvideColors(colors = appColorScheme, colorScheme = colorScheme) {
+            MaterialTheme(
+                shapes = Shapes,
+                typography = Typography,
+                content = content,
+            )
+        }
+    }
+
+
+}
+@Composable
+fun ProvideDimens(dimensions: Dimensions,content: @Composable () -> Unit) {
+    val dimensionSet = remember { dimensions }
+    CompositionLocalProvider(LocalAppDimens provides dimensionSet, content = content)
+}
+@Composable
+fun getDimensions(): Dimensions {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+
+    return when {
+        screenWidthDp <= 360 -> smallDimensions
+        screenWidthDp in 361..599 -> sw360Dimensions
+        else -> tabletDimensions
+    }
+}
+@Composable
+fun ProvideColors(colors: AppColor, colorScheme: ColorScheme, content: @Composable () -> Unit) {
+    CompositionLocalProvider(values = arrayOf(LocalAppColor provides colors)) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = Typography,
             content = content
         )
     }
-
 }
+
+private val LocalAppDimens = staticCompositionLocalOf {
+    smallDimensions
+}
+
+object AppTheme {
+    val colors: AppColor
+        @Composable
+        get() = LocalAppColor.current
+
+    val dimens: Dimensions
+        @Composable
+        get() = LocalAppDimens.current
+}
+
+val Dimens: Dimensions
+    @Composable
+    get() = AppTheme.dimens
 
 fun setStatusBarColor(window: Window, color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) { // Android 15+

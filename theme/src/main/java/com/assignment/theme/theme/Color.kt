@@ -15,6 +15,7 @@ val Orange95 = Color(0xFFFED2CD)
 val Orange99 = Color(0xFFFED2CD)
 
 
+val BlueGray0 = Color(0xFF4A0082)
 val BlueGray10 = Color(0xFF1D192B)
 val BlueGray20 = Color(0xFF332D41)
 val BlueGray30 = Color(0xFF4A4458)
