@@ -4,31 +4,36 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.assignment.hometab.navigation.homeNavigation
 import com.assignment.navigation.extension.SetNavGraph
 import com.assignment.navigation.navigation.constants.NavigationConstants
+import com.assignment.theme.component.ScaffoldTopAppbar
+import com.assignment.theme.theme.AppTheme
 import com.assignment.theme.theme.FoodicsAssignmentTheme
 import com.assignment.theme.theme.color
 
@@ -41,8 +46,11 @@ class HomeTabActivity : ComponentActivity() {
             FoodicsAssignmentTheme {
                 navController = rememberNavController()
 
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
+                ScaffoldTopAppbar(
+                    title = stringResource(id = R.string.title_menu),
+                    onNavigationIconClick = {
+
+                    },
                     bottomBar = {
                         BottomNavigationBar(navController = navController)
                     }
@@ -56,6 +64,7 @@ class HomeTabActivity : ComponentActivity() {
                         )
                     }
                 }
+
             }
         }
     }
@@ -75,12 +84,20 @@ fun BottomNavigationBar(navController: NavHostController) {
         mutableIntStateOf(items.indexOf(startDestination))
     }
     Surface(
+
         border = BorderStroke(.5.dp, MaterialTheme.color.white),
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-    ) {
+        shape = RoundedCornerShape(
+            topStart = AppTheme.dimens.paddingLarge,
+            topEnd = AppTheme.dimens.paddingLarge
+        ),
+
+        ) {
         NavigationBar(
             tonalElevation = 8.dp,
-            containerColor = MaterialTheme.color.fieldColor
+            containerColor = MaterialTheme.color.navigationColor,
+            windowInsets = WindowInsets(
+                0.dp
+            )
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
@@ -92,8 +109,25 @@ fun BottomNavigationBar(navController: NavHostController) {
                 val isSelected = index == selectedTab
 
                 NavigationBarItem(
-                    icon = { Icon(screen.icon, contentDescription = screen.name) },
-                    label = { Text(screen.name) },
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 0.dp),
+                    icon = {
+                        Icon(
+                            if (isSelected) painterResource(id = screen.selectedIcon) else painterResource(
+                                id = screen.unSelectedIcon
+                            ),
+                            contentDescription = screen.name,
+                            modifier = Modifier.size(AppTheme.dimens.navIconSize)
+                        )
+                    },
+                    label = {
+                        Text(
+                            screen.name,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontSize = AppTheme.dimens.navLabelFontSize
+                            )
+                        )
+                    },
                     selected = isSelected,
                     onClick = {
                         if (currentRoute != screen.route) {
@@ -108,13 +142,14 @@ fun BottomNavigationBar(navController: NavHostController) {
                         }
                     },
 
+
                     colors = NavigationBarItemDefaults
                         .colors(
-                            selectedIconColor = MaterialTheme.color.selectedColor,
-                            selectedTextColor = MaterialTheme.color.selectedColor,
-                            unselectedIconColor = MaterialTheme.color.unSelectedColor,
-                            unselectedTextColor = MaterialTheme.color.unSelectedColor,
-                            indicatorColor = MaterialTheme.color.fieldColor
+                            selectedIconColor = MaterialTheme.color.black,
+                            selectedTextColor = MaterialTheme.color.black,
+                            unselectedIconColor = MaterialTheme.color.black,
+                            unselectedTextColor = MaterialTheme.color.black,
+                            indicatorColor = Color.Transparent
                         )
                 )
             }
@@ -122,18 +157,42 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 }
 
-sealed class BottomNavItem(val name: String, val route: String, val icon: ImageVector) {
+sealed class BottomNavItem(
+    val name: String,
+    val route: String,
+    val selectedIcon: Int,
+    val unSelectedIcon: Int
+) {
     data class Home(val title: String) :
-        BottomNavItem(title, NavigationConstants.HOME_PATH, Icons.Default.Home)
+        BottomNavItem(
+            name = title,
+            route = NavigationConstants.HOME_PATH,
+
+            selectedIcon = R.drawable.ic_table_selected,
+            unSelectedIcon = R.drawable.ic_table_unselected
+        )
 
     data class Orders(val title: String) :
-        BottomNavItem(title, NavigationConstants.ORDERS_PATH, Icons.Default.Favorite)
+        BottomNavItem(
+            title,
+            NavigationConstants.ORDERS_PATH,
+            R.drawable.ic_orders_selected,
+            R.drawable.ic_orders_unselected
+        )
 
     data class Menu(val title: String) :
-        BottomNavItem(title, NavigationConstants.MENU_PATH, Icons.Default.Favorite)
+        BottomNavItem(
+            title,
+            NavigationConstants.MENU_PATH,
+            R.drawable.ic_menu_selected,
+            R.drawable.ic_menu_unselected
+        )
 
     data class Settings(val title: String) :
-        BottomNavItem(title, NavigationConstants.SETTINGS_PATH, Icons.Default.Favorite)
-
-
+        BottomNavItem(
+            title,
+            NavigationConstants.SETTINGS_PATH,
+            R.drawable.ic_settings_selected,
+            R.drawable.ic_settings_unselected
+        )
 }

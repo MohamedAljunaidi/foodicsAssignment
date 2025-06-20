@@ -82,6 +82,7 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":theme"))
     implementation(project(":network"))
+    implementation(project(":caching"))
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose.android)
     implementation(libs.activity.compose)
@@ -104,4 +105,6 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
+    implementation(libs.androidx.core.splashscreen)
+
 }
