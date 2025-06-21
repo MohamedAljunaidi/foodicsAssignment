@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.assignment.core.bases.BaseActivity
 import com.assignment.hometab.navigation.homeNavigation
 import com.assignment.navigation.extension.SetNavGraph
 import com.assignment.navigation.navigation.constants.NavigationConstants
@@ -37,7 +38,7 @@ import com.assignment.theme.theme.AppTheme
 import com.assignment.theme.theme.FoodicsAssignmentTheme
 import com.assignment.theme.theme.color
 
-class HomeTabActivity : ComponentActivity() {
+class HomeTabActivity : BaseActivity() {
     private lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {

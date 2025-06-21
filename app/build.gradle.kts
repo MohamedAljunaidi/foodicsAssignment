@@ -79,10 +79,12 @@ android {
 
 dependencies {
     implementation(project(":features:hometab"))
+    implementation(project(":features:search"))
     implementation(project(":navigation"))
     implementation(project(":theme"))
     implementation(project(":network"))
     implementation(project(":caching"))
+    implementation(project(":core"))
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose.android)
     implementation(libs.activity.compose)

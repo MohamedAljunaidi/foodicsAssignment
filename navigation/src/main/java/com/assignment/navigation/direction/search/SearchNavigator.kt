@@ -9,7 +9,7 @@ import com.assignment.navigation.navigation.constants.NavigationConstants
 
 object SearchNavigator : INavigatorDirection() {
 
-    private const val SEARCH_ACTIVITY_PACKAGE_NAME = "search.presentation"
+    private const val SEARCH_ACTIVITY_PACKAGE_NAME = "search"
     private const val SEARCH_SCREEN_NAME = "SearchActivity"
     private const val FEATURE_SEARCH_PATH =
         "${NavigationConstants.FEATURE_PATH}.$SEARCH_ACTIVITY_PACKAGE_NAME"

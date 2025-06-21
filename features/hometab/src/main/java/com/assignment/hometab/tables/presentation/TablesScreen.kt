@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,8 +29,11 @@ import com.assignment.hometab.tables.domain.model.Products
 import com.assignment.hometab.tables.presentation.component.CategoryTabs
 import com.assignment.hometab.tables.presentation.component.AddToCard
 import com.assignment.hometab.tables.presentation.component.ProductCard
-import com.assignment.hometab.tables.presentation.component.SearchView
+import com.assignment.navigation.direction.search.SearchDestinationEnum
+import com.assignment.navigation.direction.search.SearchNavigator
+import com.assignment.navigation.extension.navigateToDirection
 import com.assignment.theme.WindowSizeClass
+import com.assignment.theme.component.SearchBarView
 import com.assignment.theme.getWindowSizeClass
 import com.assignment.theme.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
@@ -91,7 +95,7 @@ fun TableListScreen(
     categoriesState: List<Categories>?,
     productsState: List<Products>?
 ) {
-
+    val context = LocalContext.current
     val isTablet = getWindowSizeClass() == WindowSizeClass.Expanded
 
     val spanCount = if (isTablet) 4 else 2
@@ -111,9 +115,19 @@ fun TableListScreen(
             verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall),
         ) {
             item(span = { GridItemSpan(spanCount) }) {
-                SearchView(
-                    modifier = Modifier.padding(top = AppTheme.dimens.paddingSmall)
+                SearchBarView(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = false,
+                    onQueryChange = {},
+                    onSearchClick = {
+                        SearchNavigator.navigateToDirection(
+                            context,
+                            destination = SearchDestinationEnum.SEARCH
+                        )
+                    }
                 )
+
             }
 
 
@@ -121,7 +135,7 @@ fun TableListScreen(
                 CategoryTabs(
                     categories = categoriesState,
                     onTabSelected = { id ->
-                        viewModel.getProducts(id, showLoading = true)
+                        viewModel.getProductsByCategoryId(id, showLoading = true)
                     }
                 )
             }

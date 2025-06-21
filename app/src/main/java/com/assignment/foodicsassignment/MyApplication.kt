@@ -4,6 +4,7 @@ import android.app.Application
 import com.assignment.caching.di.CachingModule
 import com.assignment.hometab.tables.di.CategoriesModule
 import com.assignment.network.di.NetworkModule
+import com.assignment.search.di.SearchModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +19,16 @@ class MyApplication : Application() {
             androidLogger()
             androidFileProperties()
 
-            modules(listOf(NetworkModule().module, CachingModule().module, CategoriesModule().module, defaultModule))
+            modules(
+                listOf(
+                    NetworkModule().module,
+                    CachingModule().module,
+                    CategoriesModule().module,
+                    SearchModule().module,
+                    defaultModule,
+
+                )
+            )
 
         }
     }

@@ -16,7 +16,12 @@ interface ProductsDao : BaseDao<ProductsEntity> {
 
     @Transaction
     @Query("SELECT * FROM products_table WHERE categoryId = :categoryId")
-    suspend fun getProducts(categoryId: Int): List<ProductsEntity>
+    suspend fun getProductsByCategoryId(categoryId: Int): List<ProductsEntity>
+
+
+    @Query("SELECT * FROM products_table")
+    fun getAllProducts(): List<ProductsEntity>
+
 
     @Query("DELETE FROM products_table")
     fun deleteAllData()

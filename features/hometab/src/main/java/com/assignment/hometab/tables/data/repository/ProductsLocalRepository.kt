@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.flow
 class ProductsLocalRepository(private val cachingManager: CachingManager) :
     IProductsLocalRepository {
 
-    override fun getProducts(categoryId: Int): Flow<ResultWrapper<List<Products>?>> = flow {
+    override fun getProductsByCategoryId(categoryId: Int): Flow<ResultWrapper<List<Products>?>> = flow {
         val result = tryMapperQuery({
-            cachingManager.getProvider(ProviderEnum.ROOM).getProducts(
+            cachingManager.getProvider(ProviderEnum.ROOM).getProductsByCategoryId(
                 categoryId = categoryId
             )
         })

@@ -25,9 +25,13 @@ class RoomManager(private val databaseRoom: DatabaseRoom) : BaseManager {
         safeLocalDataCall { databaseRoom.productsDao().insertProducts(productsEntity) }
 
 
-    override suspend fun getProducts(categoryId: Int) =
+    override suspend fun getProductsByCategoryId(categoryId: Int) =
         safeLocalDataCall {
-            databaseRoom.productsDao().getProducts(categoryId)
+            databaseRoom.productsDao().getProductsByCategoryId(categoryId)
+        }
+    override suspend fun getAllProducts() =
+        safeLocalDataCall {
+            databaseRoom.productsDao().getAllProducts()
         }
 
     override suspend fun insertOrder(order: OrderEntity): ResultWrapper<Unit> {
