@@ -5,9 +5,13 @@ import com.assignment.core.bases.BaseViewState
 import com.assignment.core.model.ResultException
 import com.assignment.core.model.ResultWrapper
 import com.assignment.hometab.tables.domain.model.Categories
+import com.assignment.hometab.tables.domain.model.Order
 import com.assignment.hometab.tables.domain.model.Products
+import com.assignment.hometab.tables.domain.usecases.DeleteOrdersUseCase
 import com.assignment.hometab.tables.domain.usecases.GetCategoriesUseCase
+import com.assignment.hometab.tables.domain.usecases.GetOrdersUseCase
 import com.assignment.hometab.tables.domain.usecases.GetProductsUseCase
+import com.assignment.hometab.tables.domain.usecases.InsertOrdersUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +22,10 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class TablesViewModel(
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val getProductsUseCase: GetProductsUseCase
+    private val getProductsUseCase: GetProductsUseCase,
+    private val getOrdersUseCase: GetOrdersUseCase,
+    private val insertOrdersUseCase: InsertOrdersUseCase,
+    private val deleteOrdersUseCase: DeleteOrdersUseCase,
 ) :
     BaseViewModel() {
 
@@ -32,8 +39,14 @@ class TablesViewModel(
     val products: StateFlow<List<Products>?> =
         _products.asStateFlow()
 
+    private var _orders: MutableStateFlow<Pair<String, Double>?> =
+        MutableStateFlow(null)
+    val orders: StateFlow<Pair<String, Double>?> =
+        _orders.asStateFlow()
+
     init {
         getCategories()
+
     }
 
 
@@ -63,13 +76,15 @@ class TablesViewModel(
         }
     }
 
-    private fun getProducts(categoryId: Int) {
+    fun getProducts(categoryId: Int, showLoading: Boolean = false) {
         launchCoroutine(coroutineExceptionHandler) {
 
-            getProductsUseCase(categoryId)
-                .onStart {
-                    _state.emit(BaseViewState.Loading)
-                }.collectLatest {
+            getProductsUseCase(categoryId).onStart {
+                if (showLoading) {
+                    _state.emit(BaseViewState.ShowOverLayLoading)
+                }
+            }
+                .collectLatest {
                     when (it) {
                         is ResultWrapper.Success -> {
                             _products.emit(it.data)
@@ -87,5 +102,79 @@ class TablesViewModel(
 
         }
     }
+
+    fun getOrders() {
+        launchCoroutine(coroutineExceptionHandler) {
+
+            getOrdersUseCase()
+                .collectLatest {
+                    when (it) {
+                        is ResultWrapper.Success -> {
+                            val totalPrice = it.data?.sumOf { it.price ?: 0.0 }
+                            _orders.emit(Pair(it.data?.size.toString(), totalPrice ?: 0.0))
+
+
+                        }
+
+                        is ResultWrapper.Error -> _state.emit(
+                            BaseViewState.Error(
+                                ResultException(it.error.errorModel)
+                            )
+                        )
+
+                    }
+                }
+        }
+    }
+
+    fun insertOrder(product: Products) {
+        launchCoroutine(coroutineExceptionHandler) {
+
+            val order = Order(
+                name = product.name,
+                image = product.image,
+                price = product.price,
+                description = product.description
+            )
+            insertOrdersUseCase(order)
+                .collectLatest {
+                    when (it) {
+                        is ResultWrapper.Success -> {
+                            getOrders()
+                        }
+
+                        is ResultWrapper.Error -> _state.emit(
+                            BaseViewState.Error(
+                                ResultException(it.error.errorModel)
+                            )
+                        )
+
+                    }
+                    _state.emit(BaseViewState.DataLoaded)
+                }
+        }
+    }
+
+    fun deleteOrders() {
+        launchCoroutine(coroutineExceptionHandler) {
+            deleteOrdersUseCase()
+                .collectLatest {
+                    when (it) {
+                        is ResultWrapper.Success -> {
+                            _orders.emit(Pair("0", 0.0))
+                        }
+
+                        is ResultWrapper.Error -> _state.emit(
+                            BaseViewState.Error(
+                                ResultException(it.error.errorModel)
+                            )
+                        )
+
+                    }
+                    _state.emit(BaseViewState.DataLoaded)
+                }
+        }
+    }
+
 
 }

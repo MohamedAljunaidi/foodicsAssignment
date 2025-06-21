@@ -20,8 +20,8 @@ class ProductsLocalRepository(private val cachingManager: CachingManager) :
                 categoryId = categoryId
             )
         })
-        { weather ->
-            weather?.entityToProductList()
+        { products ->
+            products?.entityToProductList()
         }
         emit(result)
     }

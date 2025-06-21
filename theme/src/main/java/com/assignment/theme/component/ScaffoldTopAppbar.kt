@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,7 +45,7 @@ fun ScaffoldTopAppbar(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     title: String,
-    onNavigationIconClick: () -> Unit,
+    onNavigationIconClick: (() -> Unit)? = null,
     navigationIcon: Painter = rememberVectorPainter(image = Icons.AutoMirrored.Outlined.ArrowBack),
     snackbarHost: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
@@ -57,15 +58,17 @@ fun ScaffoldTopAppbar(
         contentColor = contentColor,
         snackbarHost = snackbarHost,
         topBar = {
-            Surface(shadowElevation = 1.dp) {
+            Surface(shadowElevation = 4.dp) {
                 CenterAlignedTopAppBar(
+                    windowInsets = WindowInsets(0.dp),
                     title = {
 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
-                                    end = AppTheme.dimens.paddingMedium,
+                                    start = AppTheme.dimens.paddingExtraSmall,
+                                    end = AppTheme.dimens.paddingExtraSmall,
                                     top = AppTheme.dimens.paddingSmall,
                                     bottom = AppTheme.dimens.paddingSmall
                                 ),
@@ -99,17 +102,19 @@ fun ScaffoldTopAppbar(
                         actionIconContentColor = MaterialTheme.color.black,
                     ),
                     navigationIcon = {
-                        IconButton(onClick = {
-                            coroutineScope.launch {
-                                onNavigationIconClick.invoke()
-                                delay(200)
+                        if (onNavigationIconClick != null){
+                            IconButton(onClick = {
+                                coroutineScope.launch {
+                                    onNavigationIconClick.invoke()
+                                    delay(200)
+                                }
+                            }) {
+                                Icon(
+                                    modifier = Modifier.size(AppTheme.dimens.imageSizeExtraSmall),
+                                    painter = navigationIcon,
+                                    contentDescription = "navigationIcon"
+                                )
                             }
-                        }) {
-                            Icon(
-                                modifier = Modifier.size(AppTheme.dimens.imageSizeExtraSmall),
-                                painter = navigationIcon,
-                                contentDescription = "navigationIcon"
-                            )
                         }
                     },
                 )
@@ -147,9 +152,7 @@ fun IconWithText(painter: Painter, count: String) {
 fun ScaffoldTopAppbarPreview() {
     ScaffoldTopAppbar(
         title = "Table",
-        onNavigationIconClick = {
 
-        }
     ) {
 
     }

@@ -24,5 +24,6 @@ sealed class BaseViewState  {
      * Data successfully loaded.
      */
     object DataLoaded : BaseViewState()
+    object ShowOverLayLoading : BaseViewState()
 
 }

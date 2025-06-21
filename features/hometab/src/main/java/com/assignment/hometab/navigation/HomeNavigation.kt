@@ -18,7 +18,7 @@ fun NavGraphBuilder.homeNavigation(
         modifier = modifier,
     )
 
-    ordersRoute()
+    ordersRoute(modifier = modifier)
     menuRoute()
     settingsRoute()
 
@@ -36,9 +36,12 @@ fun NavGraphBuilder.tablesRoute(
 
 
 fun NavGraphBuilder.ordersRoute(
+    modifier: Modifier = Modifier
 ) {
     composable(route = NavigationConstants.ORDERS_PATH) {
-        OrdersScreen()
+        OrdersScreen(
+            modifier
+        )
     }
 }
 

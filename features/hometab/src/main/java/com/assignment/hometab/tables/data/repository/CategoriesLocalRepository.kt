@@ -18,8 +18,8 @@ class CategoriesLocalRepository(private val cachingManager: CachingManager) :
         val result = tryMapperQuery({
             cachingManager.getProvider(ProviderEnum.ROOM).getCategories()
         })
-        { weather ->
-            weather?.entityToCategoryList()
+        { categories ->
+            categories?.entityToCategoryList()
         }
         emit(result)
     }
