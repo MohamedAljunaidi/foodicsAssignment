@@ -14,7 +14,8 @@ interface IRoomManager {
 
     suspend fun insertProducts(productsEntity: List<ProductsEntity>): ResultWrapper<Unit>? = null
 
-    suspend fun getProducts(categoryId: Int): ResultWrapper<List<ProductsEntity>?>? = null
+    suspend fun getProductsByCategoryId(categoryId: Int): ResultWrapper<List<ProductsEntity>?>? = null
+    suspend fun getAllProducts(): ResultWrapper<List<ProductsEntity>?>? = null
 
 
     suspend fun insertOrder(orderEntity: OrderEntity) : ResultWrapper<Unit>? = null

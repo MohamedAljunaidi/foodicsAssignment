@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Single
 
 @Single
-class GetProductsUseCase(
+class GetProductsByCategoryIdUseCase(
     private val remoteRepository: IProductsRepository,
     private val localRepository: IProductsLocalRepository
 ) :
@@ -24,7 +24,7 @@ class GetProductsUseCase(
     override suspend fun invoke(params: Int?): Flow<ResultWrapper<List<Products>?>> =
         networkBoundResource(
             queryDb = {
-                localRepository.getProducts(params ?: 0)
+                localRepository.getProductsByCategoryId(params ?: 0)
             },
             fetchApi = {
                 remoteRepository.getProduct()
@@ -36,7 +36,7 @@ class GetProductsUseCase(
                     resultWrapperData(resultWrapper, { product ->
                         localRepository.insertProducts(products = product).collect()
                     }, {
-                        localRepository.getProducts(params ?: 0)
+                        localRepository.getProductsByCategoryId(params ?: 0)
                     })
                 }
             }, onQueryDbError = {

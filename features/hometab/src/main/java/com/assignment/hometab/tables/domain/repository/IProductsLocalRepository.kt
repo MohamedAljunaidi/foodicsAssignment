@@ -5,7 +5,7 @@ import com.assignment.hometab.tables.domain.model.Products
 import kotlinx.coroutines.flow.Flow
 
 interface IProductsLocalRepository {
-    fun getProducts(categoryId: Int): Flow<ResultWrapper<List<Products>?>>
+    fun getProductsByCategoryId(categoryId: Int): Flow<ResultWrapper<List<Products>?>>
     fun insertProducts(products: List<Products>?): Flow<ResultWrapper<Unit?>>
 
 }

@@ -10,7 +10,7 @@ import com.assignment.hometab.tables.domain.model.Products
 import com.assignment.hometab.tables.domain.usecases.DeleteOrdersUseCase
 import com.assignment.hometab.tables.domain.usecases.GetCategoriesUseCase
 import com.assignment.hometab.tables.domain.usecases.GetOrdersUseCase
-import com.assignment.hometab.tables.domain.usecases.GetProductsUseCase
+import com.assignment.hometab.tables.domain.usecases.GetProductsByCategoryIdUseCase
 import com.assignment.hometab.tables.domain.usecases.InsertOrdersUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class TablesViewModel(
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val getProductsUseCase: GetProductsUseCase,
+    private val getProductsByCategoryIdUseCase: GetProductsByCategoryIdUseCase,
     private val getOrdersUseCase: GetOrdersUseCase,
     private val insertOrdersUseCase: InsertOrdersUseCase,
     private val deleteOrdersUseCase: DeleteOrdersUseCase,
@@ -62,7 +62,7 @@ class TablesViewModel(
                             _categories.emit(it.data)
                             val categoryId = it.data?.firstOrNull()?.id
 
-                            categoryId?.let { it1 -> getProducts(it1) }
+                            categoryId?.let { it1 -> getProductsByCategoryId(it1) }
                         }
 
                         is ResultWrapper.Error -> _state.emit(
@@ -76,10 +76,10 @@ class TablesViewModel(
         }
     }
 
-    fun getProducts(categoryId: Int, showLoading: Boolean = false) {
+    fun getProductsByCategoryId(categoryId: Int, showLoading: Boolean = false) {
         launchCoroutine(coroutineExceptionHandler) {
 
-            getProductsUseCase(categoryId).onStart {
+            getProductsByCategoryIdUseCase(categoryId).onStart {
                 if (showLoading) {
                     _state.emit(BaseViewState.ShowOverLayLoading)
                 }

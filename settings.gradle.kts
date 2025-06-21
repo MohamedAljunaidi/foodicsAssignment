@@ -29,3 +29,5 @@ include(":network")
 include(":features:hometab")
 include(":navigation")
 include(":caching")
+include(":features:search")
+
