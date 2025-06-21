@@ -46,13 +46,25 @@ class HomeTabActivity : ComponentActivity() {
             FoodicsAssignmentTheme {
                 navController = rememberNavController()
 
-                ScaffoldTopAppbar(
-                    title = stringResource(id = R.string.title_menu),
-                    onNavigationIconClick = {
+                var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-                    },
+                val bottomNavItems = listOf(
+                    BottomNavItem.Home(stringResource(id = R.string.title_table)),
+                    BottomNavItem.Orders(stringResource(id = R.string.title_orders)),
+                    BottomNavItem.Menu(stringResource(id = R.string.title_menu)),
+                    BottomNavItem.Settings(stringResource(id = R.string.title_settings)),
+                )
+                val selectedTabTitle = bottomNavItems[selectedTabIndex].name
+
+                ScaffoldTopAppbar(
+                    title = selectedTabTitle,
                     bottomBar = {
-                        BottomNavigationBar(navController = navController)
+                        BottomNavigationBar(
+                            navController = navController,
+                            items = bottomNavItems,
+                            selectedTabIndex = selectedTabIndex,
+                            onTabSelected = { selectedTabIndex = it }
+                        )
                     }
                 ) { innerPadding ->
                     SetNavGraph(
@@ -71,49 +83,36 @@ class HomeTabActivity : ComponentActivity() {
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
-    val items = listOf(
-        BottomNavItem.Home(stringResource(id = R.string.title_table)),
-        BottomNavItem.Orders(stringResource(id = R.string.title_orders)),
-        BottomNavItem.Menu(stringResource(id = R.string.title_menu)),
-        BottomNavItem.Settings(stringResource(id = R.string.title_settings)),
-    )
+fun BottomNavigationBar(
+    navController: NavHostController,
+    items: List<BottomNavItem>,
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    val startDestination = items.first()
-    var selectedTab by remember {
-        mutableIntStateOf(items.indexOf(startDestination))
-    }
     Surface(
-
         border = BorderStroke(.5.dp, MaterialTheme.color.white),
         shape = RoundedCornerShape(
             topStart = AppTheme.dimens.paddingLarge,
             topEnd = AppTheme.dimens.paddingLarge
-        ),
-
-        ) {
+        )
+    ) {
         NavigationBar(
             tonalElevation = 8.dp,
             containerColor = MaterialTheme.color.navigationColor,
-            windowInsets = WindowInsets(
-                0.dp
-            )
+            windowInsets = WindowInsets(0.dp)
         ) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
-
             items.forEachIndexed { index, screen ->
-                if (currentRoute == NavigationConstants.HOME_PATH) {
-                    selectedTab = 0
-                }
-                val isSelected = index == selectedTab
+                val isSelected = index == selectedTabIndex
 
                 NavigationBarItem(
-                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 0.dp),
+                    modifier = Modifier.padding(horizontal = 4.dp),
                     icon = {
                         Icon(
-                            if (isSelected) painterResource(id = screen.selectedIcon) else painterResource(
-                                id = screen.unSelectedIcon
+                            painter = painterResource(
+                                id = if (isSelected) screen.selectedIcon else screen.unSelectedIcon
                             ),
                             contentDescription = screen.name,
                             modifier = Modifier.size(AppTheme.dimens.navIconSize)
@@ -121,7 +120,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                     },
                     label = {
                         Text(
-                            screen.name,
+                            text = screen.name,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontSize = AppTheme.dimens.navLabelFontSize
@@ -131,7 +130,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                     selected = isSelected,
                     onClick = {
                         if (currentRoute != screen.route) {
-                            selectedTab = index
+                            onTabSelected(index)
                             navController.navigate(screen.route) {
                                 popUpTo(navController.graph.startDestinationId) {
                                     saveState = true
@@ -141,22 +140,18 @@ fun BottomNavigationBar(navController: NavHostController) {
                             }
                         }
                     },
-
-
-                    colors = NavigationBarItemDefaults
-                        .colors(
-                            selectedIconColor = MaterialTheme.color.black,
-                            selectedTextColor = MaterialTheme.color.black,
-                            unselectedIconColor = MaterialTheme.color.black,
-                            unselectedTextColor = MaterialTheme.color.black,
-                            indicatorColor = Color.Transparent
-                        )
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.color.black,
+                        selectedTextColor = MaterialTheme.color.black,
+                        unselectedIconColor = MaterialTheme.color.black,
+                        unselectedTextColor = MaterialTheme.color.black,
+                        indicatorColor = Color.Transparent
+                    )
                 )
             }
         }
     }
 }
-
 sealed class BottomNavItem(
     val name: String,
     val route: String,

@@ -1,8 +1,10 @@
 package com.assignment.hometab.tables.data.mapper
 
 import com.assignment.caching.roomdb.features.categories.entities.CategoryEntity
+import com.assignment.caching.roomdb.features.orders.entities.OrderEntity
 import com.assignment.caching.roomdb.features.products.entities.ProductsEntity
 import com.assignment.hometab.tables.domain.model.Categories
+import com.assignment.hometab.tables.domain.model.Order
 import com.assignment.hometab.tables.domain.model.Products
 
 
@@ -79,3 +81,37 @@ internal fun List<Products>.toProductsEntity(): List<ProductsEntity> {
     }
     return dataList
 }
+
+
+internal fun List<OrderEntity>.entityToOrderList(): List<Order> {
+    val dataList = arrayListOf<Order>()
+    this.map {
+        dataList.add(
+            it.entityToOrderItem()
+        )
+    }
+    return dataList
+}
+
+
+internal fun OrderEntity.entityToOrderItem(): Order {
+    return Order(
+        id = this.id,
+        image = this.image,
+        name = this.name,
+        price = this.price,
+        description = this.description,
+    )
+}
+
+internal fun Order.toOrderEntity(): OrderEntity {
+    return OrderEntity(
+        id = this.id?:0,
+        image = this.image,
+        name = this.name,
+        price = this.price,
+        description = this.description,
+    )
+}
+
+

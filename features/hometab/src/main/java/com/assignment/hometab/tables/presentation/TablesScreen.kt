@@ -2,15 +2,18 @@ package com.assignment.hometab.tables.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,15 +22,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.assignment.core.bases.BaseScreen
+import com.assignment.core.bases.BaseViewState
 import com.assignment.hometab.tables.domain.model.Categories
 import com.assignment.hometab.tables.domain.model.Products
-import com.assignment.hometab.tables.presentation.component.ProductCard
 import com.assignment.hometab.tables.presentation.component.CategoryTabs
-import com.assignment.hometab.tables.presentation.component.OrderCard
+import com.assignment.hometab.tables.presentation.component.AddToCard
+import com.assignment.hometab.tables.presentation.component.ProductCard
 import com.assignment.hometab.tables.presentation.component.SearchView
 import com.assignment.theme.WindowSizeClass
 import com.assignment.theme.getWindowSizeClass
+import com.assignment.theme.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 @Composable
 internal fun TablesScreen(
@@ -37,28 +43,40 @@ internal fun TablesScreen(
 
     val categoriesState by viewModel.categories.collectAsStateWithLifecycle()
     val productsState by viewModel.products.collectAsStateWithLifecycle()
+    val order by viewModel.orders.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     BaseScreen(
         baseViewState = state,
         content = {
-            categoriesState?.first()
+            viewModel.getOrders()
             Box(modifier = modifier.fillMaxSize()) {
-                TableListScreen(
-                    modifier,
-                    categoriesState,
-                    productsState
-                )
-                OrderCard(
+                Column(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(16.dp),
-                    orderNumber = "123",
-                    buttonText = "Button Text",
-                    amount = "$10.99", {
+                        .fillMaxSize()
+                        .padding(top = AppTheme.dimens.paddingMedium)
+                ) {
+                    TableListScreen(
+                        modifier = Modifier.weight(1f),
+                        viewModel = viewModel,
+                        state = state,
+                        categoriesState = categoriesState,
+                        productsState = productsState
+                    )
 
-                    }
-                )
+                    AddToCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(AppTheme.dimens.paddingMedium),
+                        orderNumber = order?.first ?: "0",
+                        buttonText = "View Order",
+                        amount = "$${String.format(Locale.US, "%.2f", order?.second)}",
+                        onClick = {
+                            viewModel.deleteOrders()
+                        }
+                    )
+                }
+
             }
         },
     )
@@ -68,6 +86,8 @@ internal fun TablesScreen(
 @Composable
 fun TableListScreen(
     modifier: Modifier = Modifier,
+    viewModel: TablesViewModel,
+    state: BaseViewState,
     categoriesState: List<Categories>?,
     productsState: List<Products>?
 ) {
@@ -82,46 +102,58 @@ fun TableListScreen(
         LazyVerticalGrid(
             columns = GridCells.Fixed(spanCount),
             contentPadding = PaddingValues(
-                start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp
+                start = AppTheme.dimens.paddingSmall,
+                end = AppTheme.dimens.paddingSmall,
+                top = 0.dp,
+                bottom = AppTheme.dimens.paddingSmall
             ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall),
         ) {
-            // Full-width items using Span
             item(span = { GridItemSpan(spanCount) }) {
                 SearchView(
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(top = AppTheme.dimens.paddingSmall)
                 )
             }
 
-            item(span = { GridItemSpan(spanCount) }) {
-                Spacer(modifier = Modifier.height(10.dp))
-            }
 
             item(span = { GridItemSpan(spanCount) }) {
                 CategoryTabs(
                     categories = categoriesState,
                     onTabSelected = { id ->
-
-
+                        viewModel.getProducts(id, showLoading = true)
                     }
                 )
             }
 
             item(span = { GridItemSpan(spanCount) }) {
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(AppTheme.dimens.paddingSmall))
+            }
+
+            if (state is BaseViewState.ShowOverLayLoading) {
+                item(span = { GridItemSpan(spanCount) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                    Spacer(modifier = Modifier.height(AppTheme.dimens.paddingSmall))
+                }
+
             }
 
             itemsIndexed(productsState.orEmpty()) { index, product ->
                 Box(
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(AppTheme.dimens.paddingExtraSmall)
                 ) {
                     ProductCard(product = product, onProductClick = {
-
-
+                        viewModel.insertOrder(product)
                     })
                 }
             }
+
         }
     }
 

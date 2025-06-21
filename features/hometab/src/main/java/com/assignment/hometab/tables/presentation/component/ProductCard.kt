@@ -3,10 +3,10 @@ package com.assignment.hometab.tables.presentation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.assignment.hometab.tables.domain.model.Categories
 import com.assignment.hometab.tables.domain.model.Products
@@ -31,7 +32,10 @@ fun ProductCard(product: Products, onProductClick: ((product: Products) -> Unit)
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f)
+            .size(
+                width = AppTheme.dimens.cardMinWidth,
+                height = AppTheme.dimens.cardMinHeight
+            )
             .clickable {
                 onProductClick?.invoke(product)
             }
@@ -49,13 +53,18 @@ fun ProductCard(product: Products, onProductClick: ((product: Products) -> Unit)
                 text = product.name ?: "",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp)
+                    .height(AppTheme.dimens.boxMinHeight)
                     .background(
                         color = AppTheme.colors.fieldColor
                     )
-                    .padding(16.dp),
+                    .padding(
+                        start = AppTheme.dimens.paddingSmall,
+                        end = AppTheme.dimens.paddingSmall,
+                        top = AppTheme.dimens.paddingSmall,
+                        bottom = AppTheme.dimens.paddingSmall
+                    ),
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = AppTheme.dimens.bodyLarge
+                    fontSize = AppTheme.dimens.titleMedium,lineHeight = 24.sp
                 ),
                 color = AppTheme.colors.black,
                 maxLines = 2,

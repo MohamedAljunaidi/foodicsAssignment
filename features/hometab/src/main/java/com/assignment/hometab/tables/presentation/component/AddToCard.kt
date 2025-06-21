@@ -29,7 +29,7 @@ import com.assignment.theme.theme.AppTheme
 import com.assignment.theme.theme.Shapes
 
 @Composable
-fun OrderCard(
+fun AddToCard(
     modifier: Modifier = Modifier,
     orderNumber: String,
     buttonText: String,
@@ -55,7 +55,7 @@ fun OrderCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(AppTheme.dimens.buttonHeight)
                         .clip(CircleShape)
                         .background(Color.White),
                     contentAlignment = Alignment.Center
@@ -106,7 +106,7 @@ fun OrderCard(
 @Preview(showBackground = true)
 @Composable
 fun OrderCardPreview() {
-    OrderCard(
+    AddToCard(
         modifier = Modifier,
         orderNumber = "123",
         buttonText = "Button Text",
