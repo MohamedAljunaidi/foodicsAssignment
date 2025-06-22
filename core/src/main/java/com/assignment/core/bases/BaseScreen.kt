@@ -44,20 +44,4 @@ fun LoadingScreen() {
     }
 }
 
-@Composable
-fun ErrorScreen(onRetry: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "An error occurred", color = MaterialTheme.colorScheme.error)
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = onRetry) {
-                Text(text = "Retry")
-            }
-        }
-    }
-}
+

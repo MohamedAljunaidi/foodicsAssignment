@@ -1,7 +1,5 @@
 package com.assignment.network.extensions
 
-
-
 fun substitutePathParams(url: String, pathParams: Map<String, String>?): String {
     var substitutedUrl = url
     pathParams?.forEach { (key, value) ->
@@ -10,9 +8,3 @@ fun substitutePathParams(url: String, pathParams: Map<String, String>?): String 
     return substitutedUrl
 }
 
-private operator fun <K, V> Map<out K, V>.plus(map: Map<out K, V>?): Map<K, V> =
-    LinkedHashMap(this).apply {
-        if (map != null) putAll(map)
-    }
-
-private fun String.toPathParamRepresentation() = "{$this}"

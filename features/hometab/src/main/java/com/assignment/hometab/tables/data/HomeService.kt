@@ -5,7 +5,7 @@ import com.assignment.hometab.tables.data.model.ProductResponse
 import com.assignment.network.result.NetworkResult
 import com.assignment.network.services.ApiManager
 
-class CategoriesService(private val apiManager: ApiManager) {
+class HomeService(private val apiManager: ApiManager) {
 
     companion object {
         private const val PATH_GET_CATEGORIES =
@@ -16,12 +16,12 @@ class CategoriesService(private val apiManager: ApiManager) {
     }
 
     suspend fun getCategories(
-    ): NetworkResult<ArrayList<CategoriesResponse>> =
+    ): NetworkResult<List<CategoriesResponse>> =
         apiManager.getRequest(
             PATH_GET_CATEGORIES
         )
     suspend fun getProducts(
-    ): NetworkResult<ArrayList<ProductResponse>> =
+    ): NetworkResult<List<ProductResponse>> =
         apiManager.getRequest(
             PATH_GET_PRODUCTS
         )

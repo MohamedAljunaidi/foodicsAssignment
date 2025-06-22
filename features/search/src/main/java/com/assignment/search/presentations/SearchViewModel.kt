@@ -29,19 +29,12 @@ class SearchViewModel(
     private val _searchQuery = mutableStateOf("")
     val searchQuery: State<String> = _searchQuery
 
-
-    init {
-        getAllProducts()
-    }
-
-
-
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
         filterProducts()
     }
 
-    private fun filterProducts() {
+     fun filterProducts() {
         if (_searchQuery.value.isEmpty()) {
             _filteredProducts.value = emptyList()
             return

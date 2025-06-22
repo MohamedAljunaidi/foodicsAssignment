@@ -1,4 +1,4 @@
-package com.assignment.theme
+package com.assignment.theme.extensions
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable

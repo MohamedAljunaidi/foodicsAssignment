@@ -102,4 +102,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.koin.ksp.compiler)
 
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
+
 }

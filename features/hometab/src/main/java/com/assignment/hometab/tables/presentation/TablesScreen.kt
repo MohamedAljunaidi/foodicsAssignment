@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,15 +27,15 @@ import com.assignment.core.bases.BaseScreen
 import com.assignment.core.bases.BaseViewState
 import com.assignment.hometab.tables.domain.model.Categories
 import com.assignment.hometab.tables.domain.model.Products
-import com.assignment.hometab.tables.presentation.component.CategoryTabs
 import com.assignment.hometab.tables.presentation.component.AddToCard
+import com.assignment.hometab.tables.presentation.component.CategoryTabs
 import com.assignment.hometab.tables.presentation.component.ProductCard
 import com.assignment.navigation.direction.search.SearchDestinationEnum
 import com.assignment.navigation.direction.search.SearchNavigator
 import com.assignment.navigation.extension.navigateToDirection
-import com.assignment.theme.WindowSizeClass
+import com.assignment.theme.extensions.WindowSizeClass
 import com.assignment.theme.component.SearchBarView
-import com.assignment.theme.getWindowSizeClass
+import com.assignment.theme.extensions.getWindowSizeClass
 import com.assignment.theme.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
@@ -49,6 +50,11 @@ internal fun TablesScreen(
     val productsState by viewModel.products.collectAsStateWithLifecycle()
     val order by viewModel.orders.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+
+    LaunchedEffect(Unit) {
+        viewModel.getCategoryList()
+    }
 
     BaseScreen(
         baseViewState = state,
@@ -134,8 +140,9 @@ fun TableListScreen(
             item(span = { GridItemSpan(spanCount) }) {
                 CategoryTabs(
                     categories = categoriesState,
-                    onTabSelected = { id ->
-                        viewModel.getProductsByCategoryId(id, showLoading = true)
+                    selectedTabIndex = viewModel.selectedTabIndex,
+                    onTabSelected = { tab ->
+                        viewModel.onTabSelected(index = tab.first, categoryId = tab.second)
                     }
                 )
             }

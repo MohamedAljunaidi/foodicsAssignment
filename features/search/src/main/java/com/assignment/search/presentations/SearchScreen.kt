@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.assignment.core.bases.BaseScreen
 import com.assignment.theme.component.SearchBarView
-import com.assignment.theme.WindowSizeClass
+import com.assignment.theme.extensions.WindowSizeClass
 import com.assignment.theme.component.ScaffoldTopAppbar
-import com.assignment.theme.getWindowSizeClass
+import com.assignment.theme.extensions.getWindowSizeClass
 import com.assignment.theme.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -34,6 +35,10 @@ internal fun SearchScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+    LaunchedEffect(Unit) {
+        viewModel.getAllProducts()
+    }
 
     BaseScreen(
         baseViewState = state,
