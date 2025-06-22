@@ -16,37 +16,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.assignment.hometab.tables.domain.model.Categories
+import com.assignment.hometab.tables.presentation.TablesViewModel
 import com.assignment.theme.theme.AppTheme
 
 @Composable
 fun CategoryTabs(
     categories: List<Categories>? = null,
-    onTabSelected: (Int) -> Unit = {}
+    selectedTabIndex: Int,
+    onTabSelected: (Pair<Int, Int>) -> Unit = {}
 ) {
 
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var tabIndex = selectedTabIndex
 
     ScrollableTabRow(
-        selectedTabIndex = selectedTabIndex,
+        selectedTabIndex = tabIndex,
         edgePadding = 0.dp,
         indicator = { tabPositions ->
-            TabRowDefaults.SecondaryIndicator(
-                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                color = AppTheme.colors.selectedColor
-            )
+            if (tabPositions.isNotEmpty()){
+                TabRowDefaults.SecondaryIndicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
+                    color = AppTheme.colors.selectedColor
+                )
+            }
         }
     ) {
         categories?.forEachIndexed { index, category ->
             Tab(
-                selected = selectedTabIndex == index,
+                selected = tabIndex == index,
                 onClick = {
-                    selectedTabIndex = index
-                    category.id?.let { onTabSelected(it) }
+                    tabIndex = index
+                    category.id?.let { onTabSelected(Pair(index,it)) }
                 },
                 text = {
                     Text(
                         text = category.name ?: "",
-                        fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
+                        fontWeight = if (tabIndex == index) FontWeight.Bold else FontWeight.Normal,
                         color = AppTheme.colors.black,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontSize = AppTheme.dimens.titleMedium
@@ -56,10 +60,4 @@ fun CategoryTabs(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun TableListScreenPreview() {
-    CategoryTabs()
 }

@@ -1,5 +1,8 @@
 package com.assignment.hometab.tables.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import com.assignment.core.bases.BaseViewModel
 import com.assignment.core.bases.BaseViewState
 import com.assignment.core.model.ResultException
@@ -29,6 +32,8 @@ class TablesViewModel(
 ) :
     BaseViewModel() {
 
+    private var hasLoadedCategory = false
+
     private var _categories: MutableStateFlow<List<Categories>?> =
         MutableStateFlow(null)
     val categories: StateFlow<List<Categories>?> =
@@ -40,39 +45,52 @@ class TablesViewModel(
         _products.asStateFlow()
 
     private var _orders: MutableStateFlow<Pair<String, Double>?> =
-        MutableStateFlow(null)
+        MutableStateFlow(
+            Pair(
+                "0",
+                0.0
+            )
+        )
     val orders: StateFlow<Pair<String, Double>?> =
         _orders.asStateFlow()
 
-    init {
-        getCategories()
 
+    var selectedTabIndex by mutableIntStateOf(0)
+        private set
+
+    fun onTabSelected(index: Int, categoryId: Int) {
+        selectedTabIndex = index
+        getProductsByCategoryId(categoryId, true)
     }
 
+    fun getCategoryList() {
+        if (!hasLoadedCategory){
+            hasLoadedCategory = true
+            launchCoroutine(coroutineExceptionHandler) {
 
-    private fun getCategories() {
-        launchCoroutine(coroutineExceptionHandler) {
+                getCategoriesUseCase()
+                    .onStart {
+                        _state.emit(BaseViewState.Loading)
+                    }.collectLatest {
+                        when (it) {
+                            is ResultWrapper.Success -> {
+                                it.data?.let { categories ->
+                                    _categories.emit(categories)
+                                    val categoryId = categories.firstOrNull()?.id
 
-            getCategoriesUseCase()
-                .onStart {
-                    _state.emit(BaseViewState.Loading)
-                }.collectLatest {
-                    when (it) {
-                        is ResultWrapper.Success -> {
-                            _categories.emit(it.data)
-                            val categoryId = it.data?.firstOrNull()?.id
+                                    categoryId?.let { it1 -> getProductsByCategoryId(it1) }
+                                }
+                            }
 
-                            categoryId?.let { it1 -> getProductsByCategoryId(it1) }
-                        }
-
-                        is ResultWrapper.Error -> _state.emit(
-                            BaseViewState.Error(
-                                ResultException(it.error.errorModel)
+                            is ResultWrapper.Error -> _state.emit(
+                                BaseViewState.Error(
+                                    ResultException(it.error.errorModel)
+                                )
                             )
-                        )
 
+                        }
                     }
-                }
+            }
         }
     }
 
@@ -110,8 +128,8 @@ class TablesViewModel(
                 .collectLatest {
                     when (it) {
                         is ResultWrapper.Success -> {
-                            val totalPrice = it.data?.sumOf { it.price ?: 0.0 }
-                            _orders.emit(Pair(it.data?.size.toString(), totalPrice ?: 0.0))
+                            val totalPrice = it.data?.sumOf { it.price ?: 0.0 } ?: 0.0
+                            _orders.emit(Pair(it.data?.size.toString(), totalPrice))
 
 
                         }

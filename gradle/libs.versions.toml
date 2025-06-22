@@ -27,7 +27,10 @@ gson = "2.11.0"
 ktor_serialization = "1.8.0"
 roomKtx = "2.7.2"
 uiTooling = "1.8.3"
-
+mockitoCoreVersion = "3.12.4"
+mockitoInlineVersion = "2.13.0"
+coroutinesTestVersion = "1.6.4"
+turbineVersion = "0.12.1"
 
 
 [libraries]
@@ -50,23 +53,27 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-material3 = { group = "androidx.compose.material3", name = "material3" ,version.ref = "material_version"}
-coil = { group = "io.coil-kt", name = "coil-compose" ,version.ref = "coil_version"}
-coroutines_core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core" ,version.ref = "coroutine"}
-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib" ,version.ref = "kotlinGradlePlugin"}
-loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" ,version.ref = "okhttp_version"}
-gson = { group = "com.google.code.gson", name = "gson" ,version.ref = "gson"}
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material_version" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_version" }
+coroutines_core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinGradlePlugin" }
+loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp_version" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinVersion" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinVersion" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinAnnotationVersion" }
 koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotationVersion" }
-navigation = { group = "androidx.navigation", name = "navigation-compose" ,version.ref = "navigation_version"}
+navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation_version" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCoreVersion" }
+mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockitoInlineVersion" }
+coroutines_test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTestVersion" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbineVersion" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinGradlePlugin" }
@@ -76,5 +83,5 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 automattic-measure-builds = { id = "com.automattic.android.measure-builds", version.ref = "automatticMeasureBuilds" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlinGradlePlugin"  }
-kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  version.ref = "ktor_serialization"  }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinGradlePlugin" }
+kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "ktor_serialization" }

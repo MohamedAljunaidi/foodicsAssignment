@@ -1,12 +1,12 @@
 package com.assignment.hometab.tables.di
 
 import com.assignment.caching.manager.CachingManager
-import com.assignment.hometab.tables.data.CategoriesService
+import com.assignment.hometab.tables.data.HomeService
 import com.assignment.hometab.tables.data.repository.CategoriesLocalRepository
-import com.assignment.hometab.tables.data.repository.CategoriesRepository
+import com.assignment.hometab.tables.data.repository.CategoriesRemoteRepository
 import com.assignment.hometab.tables.data.repository.OrdersLocalRepository
 import com.assignment.hometab.tables.data.repository.ProductsLocalRepository
-import com.assignment.hometab.tables.data.repository.ProductsRepository
+import com.assignment.hometab.tables.data.repository.ProductsRemoteRepository
 import com.assignment.hometab.tables.domain.repository.ICategoriesLocalRepository
 import com.assignment.hometab.tables.domain.repository.ICategoriesRepository
 import com.assignment.hometab.tables.domain.repository.IOrdersLocalRepository
@@ -22,18 +22,18 @@ import org.koin.core.annotation.Single
 class CategoriesModule {
 
     @Single
-    fun getCategoriesService(apiManager: ApiManager): CategoriesService {
-        return CategoriesService(apiManager)
+    fun getCategoriesService(apiManager: ApiManager): HomeService {
+        return HomeService(apiManager)
     }
 
     @Single
-    fun getCategoriesRepository(categoriesService: CategoriesService): ICategoriesRepository {
-        return CategoriesRepository(categoriesService)
+    fun getCategoriesRepository(homeService: HomeService): ICategoriesRepository {
+        return CategoriesRemoteRepository(homeService)
     }
 
     @Single
-    fun getProductsRepository(categoriesService: CategoriesService): IProductsRepository {
-        return ProductsRepository(categoriesService)
+    fun getProductsRepository(homeService: HomeService): IProductsRepository {
+        return ProductsRemoteRepository(homeService)
     }
 
     @Single

@@ -38,32 +38,11 @@ inline fun <T, R> NetworkResult<T>.map(
     }
 }
 
-fun <T> NetworkResult<T>.toCompletable(): NetworkResult<Unit> {
-    return when (this) {
-        is NetworkResult.Success -> NetworkResult.Success(Unit)
-        is NetworkResult.Error -> NetworkResult.Error(error)
-    }
-}
 
 fun <T> Result<T?>.toNetworkResult(): NetworkResult<T> = fold(
     onSuccess = { result -> NetworkResult.Success(result) },
     onFailure = { error -> NetworkResult.Error(error.parseErrorResponse()) }
 )
-
-inline fun NetworkResult<Unit>.onComplete(action: () -> Unit): NetworkResult<Unit> {
-    if (this is NetworkResult.Success) action()
-    return this
-}
-
-inline fun <T> NetworkResult<T>.onSuccess(action: (value: T?) -> Unit): NetworkResult<T> {
-    if (this is NetworkResult.Success) action(data)
-    return this
-}
-
-inline fun <T> NetworkResult<T>.onFailure(action: (exception: NetworkException) -> Unit): NetworkResult<T> {
-    if (this is NetworkResult.Error) action(error)
-    return this
-}
 
 fun Throwable.parseErrorResponse() = mapApiError(this)
 
